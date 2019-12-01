@@ -16,7 +16,9 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::post('/user', 'UserController@store')->name('user.auth');
+});
 Route::group(['namespace' => 'Api\\'], function () {
     Route::post('/auth/login', 'AuthController@login')->name('user.auth');
     Route::post('/auth/refresh', 'AuthController@refreshToken')->name('user.refresh');
