@@ -1,29 +1,31 @@
 <?php
 namespace App\Repositories;
 use App\User;
-use Illuminate\Support\Facades\Hash;
 class UserRepository extends BaseRepository
 {
-    protected $modelClass = User::class;
+    protected $model;
+
+    public function __construct(User $user)
+    {
+        $this->model = $user;
+    }
 
     public function getById($id)
     {
-        $query = $this->newQuery();
-        $query = $query->findOrFail($id);
-
-        return $query;
+        return $this->model->findOrFail($id);
     }
-   
+
     public function create($user)
     {
         $query = $this->newQuery();
         $response = $query->create(['name' => $user["name"], 'email' => $user["email"], 'password' => bcrypt($user["password"])]);
         return $response;
     }
-    public function updateUser($data)
+
+    public function updateUser($id, $data)
     {
-        $user = User::find($data->user_id);
-        $user->update(['name' => $data->name, 'email' => $data->email]);
-        return $user;
+        return $this->model->findOrFail($id)->update([
+            'name' => $data->name, 'email' => $data->email
+        ]);;
     }
 }

@@ -18,8 +18,8 @@ class CreateEventsTable extends Migration
             $table->bigInteger('type_event_id')->unsigned();
             $table->foreign('type_event_id')->references('id')->on('type_events');
             $table->string('image')->nullable();
-            $table->float('lng');
-            $table->float('lat');
+            $table->string('lat', 20);
+            $table->string('lng', 20);
             $table->timestamps();
         });
     }
