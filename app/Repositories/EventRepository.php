@@ -1,18 +1,25 @@
 <?php
 namespace App\Repositories;
+
 use App\Event;
-use Illuminate\Support\Facades\Hash;
+
 class EventRepository extends BaseRepository
 {
-    protected $modelClass = Event::class;
+    protected $model;
 
-  
-   
-    public function create($event)
+    public function __construct(Event $event)
     {
-        $query = $this->newQuery();
-        $response = $query->create(['type_event_id' => $event["type_event_id"],  'image' => isset($event['image']) && empty($event['image']) ? $event['image'] : null, 'lng' => $event["lng"], 'lat' => $event["lat"]]);
-        return $response;
+        $this->model = $event;
+    }
+
+    public function create($data)
+    {
+       return $this->model->create([
+            'type_event_id' => $data["type_event_id"],
+             'image' =>  $data['image'],
+             'lng' => $data["lng"],
+             'lat' => $data["lat"]
+        ]);
     }
 
 }

@@ -8,9 +8,11 @@ use Illuminate\Support\Facades\Validator;
 class EventController extends Controller
 {
 
-    public function __construct()
+    private $repository;
+
+    public function __construct(EventRepository $repository)
     {
-        $this->eventRepository = new EventRepository();
+        $this->repository = $repository;
     }
     /**
      * Display a listing of the resource.
@@ -20,24 +22,14 @@ class EventController extends Controller
     public function index()
     {
         try {
-            $events = $this->eventRepository->getAll(50, false);
+            $events = $this->repository->getAll(50, false);
 
             return response()->json(['events' => $events, 'status' => 'success'], 200);
         } catch (\Exception $exception) {
             return response()->json($exception->getMessage(), 400);
         }
-        
 
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -48,24 +40,35 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = [
+        $validator = Validator::make($request->all(), [
             'type_event_id' => 'required',
             'lng' => 'required',
             'lat' => 'required',
+            'image' => 'file'
+        ]);
 
-        ];
-        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails())
+            return response()->json(['errors' => $validator->errors()], 422);
 
-        if (!$validator->fails()) {
-            try {
-                $event = $this->eventRepository->create($request->all());
-                if ($event)
-                    return response()->json(['event' => $event, 'status' => 'success'], 200);
-            } catch (\Exception $exception) {
-                return response()->json($exception->getMessage(), 400);
-            }
-        } else
-            return response()->json(['errors' => $validator->errors()], 400);
+        $data = $request->only(['type_event_id', 'lng', 'lat']);
+
+        if($request->hasFile('image')) {
+            $file = $request->file('image');
+            $imageName = uniqid(str_random(30)) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads'),  $imageName);
+            $data['image'] = "/uploads/{$imageName}";
+        } else {
+            $data['image'] = null;
+        }
+
+        try {
+            $event = $this->repository->create($data);
+            if ($event)
+                return response()->json(['event' => $event], 201);
+
+        } catch (\Exception $exception) {
+            return response()->json($exception->getMessage(), 400);
+        }
     }
 
     /**
