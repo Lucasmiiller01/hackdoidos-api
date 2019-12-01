@@ -17,7 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['middleware' => [/*'auth:api'*/]], function () {
+Route::group(['middleware' => ['auth:api']], function () {
     Route::post('/user', 'UserController@store')->name('user.create');
     Route::get('/events', 'EventController@index')->name('event.all');
     Route::post('/events', 'EventController@store')->name('event.create');
