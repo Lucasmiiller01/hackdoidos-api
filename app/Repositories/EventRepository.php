@@ -2,22 +2,16 @@
 namespace App\Repositories;
 use App\Event;
 use Illuminate\Support\Facades\Hash;
-class UserRepository extends BaseRepository
+class EventRepository extends BaseRepository
 {
-    protected $modelClass = User::class;
+    protected $modelClass = Event::class;
 
-    public function getAll()
-    {
-        $query = $this->newQuery();
-        $query = $query->getAll(1000, false);
-
-        return $query;
-    }
+  
    
     public function create($event)
     {
         $query = $this->newQuery();
-        $response = $query->create(['description' => $event["description"], 'lng' => $event["lng"], 'lat' => $event["event"]]);
+        $response = $query->create(['description' => $event["description"],  'image' => $event['image'], 'lng' => $event["lng"], 'lat' => $event["lat"]]);
         return $response;
     }
 

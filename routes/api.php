@@ -17,7 +17,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::group(['middleware' => ['auth:api']], function () {
-    Route::post('/user', 'UserController@store')->name('user.auth');
+    Route::post('/user', 'UserController@store')->name('user.create');
+
+    Route::post('/event', 'EventController@store')->name('event.create');
+
+    Route::get('/event', 'EventController@index')->name('event.all');
+
+
 });
 Route::group(['namespace' => 'Api\\'], function () {
     Route::post('/auth/login', 'AuthController@login')->name('user.auth');
