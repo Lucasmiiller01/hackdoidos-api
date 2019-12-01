@@ -11,7 +11,7 @@ class EventRepository extends BaseRepository
     public function create($event)
     {
         $query = $this->newQuery();
-        $response = $query->create(['description' => $event["description"],  'image' => $event['image'], 'lng' => $event["lng"], 'lat' => $event["lat"]]);
+        $response = $query->create(['type_event_id' => $event["type_event_id"],  'image' => isset($event['image']) && empty($event['image']) ? $event['image'] : null, 'lng' => $event["lng"], 'lat' => $event["lat"]]);
         return $response;
     }
 

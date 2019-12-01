@@ -49,8 +49,7 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'description' => 'required',
-            'image' => 'required',
+            'type_event_id' => 'required',
             'lng' => 'required',
             'lat' => 'required',
 
