@@ -3,7 +3,7 @@ namespace App\Repositories;
 use App\User;
 class UserRepository extends BaseRepository
 {
-    protected $model;
+    protected $modelClass = User::class;
 
     public function __construct(User $user)
     {

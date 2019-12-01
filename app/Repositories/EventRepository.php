@@ -5,7 +5,8 @@ use App\Event;
 
 class EventRepository extends BaseRepository
 {
-    protected $model;
+    protected $modelClass = Event::class;
+   // protected $model;
 
     public function __construct(Event $event)
     {
