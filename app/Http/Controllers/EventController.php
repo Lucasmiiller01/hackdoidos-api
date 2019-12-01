@@ -22,7 +22,7 @@ class EventController extends Controller
     public function index()
     {
         try {
-            $events = $this->repository->getAll(50, false);
+            $events = $this->repository->getAll(200000, false);
 
             return response()->json(['events' => $events, 'status' => 'success'], 200);
         } catch (\Exception $exception) {
